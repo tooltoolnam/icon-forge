@@ -1,5 +1,7 @@
 /**
- * Remove white/light background from an image by making matching pixels transparent.
+ * Remove white/light background from an image using flood fill from edges.
+ * Only removes connected white regions touching the image border,
+ * preserving internal white areas.
  * @param {HTMLImageElement} img - Source image element
  * @param {number} tolerance - How close to white a pixel must be to be removed (0-100)
  * @returns {Promise<HTMLImageElement>} - New image with transparent background
@@ -7,32 +9,96 @@
 export function removeWhiteBackground(img, tolerance = 30) {
   return new Promise((resolve) => {
     const canvas = document.createElement("canvas");
-    canvas.width = img.naturalWidth || img.width;
-    canvas.height = img.naturalHeight || img.height;
+    const w = img.naturalWidth || img.width;
+    const h = img.naturalHeight || img.height;
+    canvas.width = w;
+    canvas.height = h;
     const ctx = canvas.getContext("2d");
     ctx.drawImage(img, 0, 0);
 
-    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    const imageData = ctx.getImageData(0, 0, w, h);
     const data = imageData.data;
-    const t = tolerance * 4.42; // scale 0-100 to ~0-442 (max distance from white = sqrt(255²*3) ≈ 441.67)
+    const t = tolerance * 4.42;
 
-    for (let i = 0; i < data.length; i += 4) {
-      const r = data[i];
-      const g = data[i + 1];
-      const b = data[i + 2];
-      // Distance from pure white (255, 255, 255)
+    const visited = new Uint8Array(w * h);
+
+    const isWhitish = (idx) => {
+      const r = data[idx];
+      const g = data[idx + 1];
+      const b = data[idx + 2];
       const dist = Math.sqrt(
         (255 - r) * (255 - r) +
         (255 - g) * (255 - g) +
         (255 - b) * (255 - b)
       );
-      if (dist < t) {
-        // Make transparent, with soft edge for anti-aliasing
-        if (dist < t * 0.7) {
-          data[i + 3] = 0; // Fully transparent
-        } else {
-          // Gradual fade at the edge
-          data[i + 3] = Math.round((dist - t * 0.7) / (t * 0.3) * data[i + 3]);
+      return dist < t;
+    };
+
+    const softAlpha = (idx) => {
+      const r = data[idx];
+      const g = data[idx + 1];
+      const b = data[idx + 2];
+      const dist = Math.sqrt(
+        (255 - r) * (255 - r) +
+        (255 - g) * (255 - g) +
+        (255 - b) * (255 - b)
+      );
+      if (dist < t * 0.7) {
+        return 0;
+      }
+      return Math.round((dist - t * 0.7) / (t * 0.3) * data[idx + 3]);
+    };
+
+    // BFS flood fill from all edge pixels
+    const queue = [];
+
+    // Seed with all border pixels that are whitish
+    for (let x = 0; x < w; x++) {
+      const topIdx = x;
+      const botIdx = (h - 1) * w + x;
+      if (!visited[topIdx] && isWhitish(topIdx * 4)) {
+        visited[topIdx] = 1;
+        queue.push(topIdx);
+      }
+      if (!visited[botIdx] && isWhitish(botIdx * 4)) {
+        visited[botIdx] = 1;
+        queue.push(botIdx);
+      }
+    }
+    for (let y = 0; y < h; y++) {
+      const leftIdx = y * w;
+      const rightIdx = y * w + (w - 1);
+      if (!visited[leftIdx] && isWhitish(leftIdx * 4)) {
+        visited[leftIdx] = 1;
+        queue.push(leftIdx);
+      }
+      if (!visited[rightIdx] && isWhitish(rightIdx * 4)) {
+        visited[rightIdx] = 1;
+        queue.push(rightIdx);
+      }
+    }
+
+    // BFS
+    let head = 0;
+    while (head < queue.length) {
+      const pos = queue[head++];
+      const x = pos % w;
+      const y = (pos - x) / w;
+
+      // Make this pixel transparent
+      data[pos * 4 + 3] = softAlpha(pos * 4);
+
+      // Check 4 neighbors
+      const neighbors = [];
+      if (x > 0) neighbors.push(pos - 1);
+      if (x < w - 1) neighbors.push(pos + 1);
+      if (y > 0) neighbors.push(pos - w);
+      if (y < h - 1) neighbors.push(pos + w);
+
+      for (const n of neighbors) {
+        if (!visited[n] && isWhitish(n * 4)) {
+          visited[n] = 1;
+          queue.push(n);
         }
       }
     }
