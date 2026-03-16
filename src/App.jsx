@@ -127,6 +127,12 @@ export default function App() {
     setGenerating(true);
     try {
       await generateZip(activeImg, bgColor, shape, padding, platforms, offsetX, offsetY);
+      if (window.gtag) {
+        window.gtag("event", "file_download", {
+          file_name: "IconForge-icons.zip",
+          platforms: platforms.join(","),
+        });
+      }
     } catch (err) {
       console.error(err);
     }
