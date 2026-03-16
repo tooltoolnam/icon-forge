@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://tooltoolnam.github.io/icon-forge/sitemap.xml

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head><title>IconForge Logo Generator</title></head>
+<body>
+<canvas id="c" width="512" height="512"></canvas>
+<script>
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+const S = 512;
+
+// Background: rounded square with gradient
+const r = S * 0.22;
+ctx.beginPath();
+ctx.moveTo(r, 0);
+ctx.lineTo(S - r, 0);
+ctx.quadraticCurveTo(S, 0, S, r);
+ctx.lineTo(S, S - r);
+ctx.quadraticCurveTo(S, S, S - r, S);
+ctx.lineTo(r, S);
+ctx.quadraticCurveTo(0, S, 0, S - r);
+ctx.lineTo(0, r);
+ctx.quadraticCurveTo(0, 0, r, 0);
+ctx.closePath();
+
+const grad = ctx.createLinearGradient(0, 0, S, S);
+grad.addColorStop(0, '#6366f1');
+grad.addColorStop(0.5, '#7c3aed');
+grad.addColorStop(1, '#a855f7');
+ctx.fillStyle = grad;
+ctx.fill();
+
+// Subtle inner glow
+const innerGrad = ctx.createRadialGradient(S*0.35, S*0.35, 0, S*0.5, S*0.5, S*0.6);
+innerGrad.addColorStop(0, 'rgba(255,255,255,0.15)');
+innerGrad.addColorStop(1, 'rgba(255,255,255,0)');
+ctx.fillStyle = innerGrad;
+ctx.fill();
+
+// Draw anvil shape (simplified, iconic)
+ctx.save();
+ctx.translate(S * 0.5, S * 0.55);
+
+// Anvil base
+ctx.fillStyle = 'rgba(255,255,255,0.95)';
+ctx.beginPath();
+ctx.moveTo(-90, 40);
+ctx.lineTo(-110, 80);
+ctx.lineTo(110, 80);
+ctx.lineTo(90, 40);
+ctx.closePath();
+ctx.fill();
+
+// Anvil body
+ctx.beginPath();
+ctx.moveTo(-80, 40);
+ctx.lineTo(-70, -10);
+ctx.lineTo(-100, -10);
+ctx.lineTo(-120, -30);
+ctx.lineTo(-120, -50);
+ctx.lineTo(-100, -50);
+ctx.lineTo(-60, -30);
+ctx.lineTo(60, -30);
+ctx.lineTo(80, -50);
+ctx.lineTo(100, -50);
+ctx.lineTo(100, -10);
+ctx.lineTo(70, -10);
+ctx.lineTo(80, 40);
+ctx.closePath();
+ctx.fill();
+
+// Anvil top surface highlight
+ctx.fillStyle = 'rgba(255,255,255,0.3)';
+ctx.beginPath();
+ctx.moveTo(-60, -30);
+ctx.lineTo(60, -30);
+ctx.lineTo(80, -50);
+ctx.lineTo(-100, -50);
+ctx.lineTo(-120, -30);
+ctx.closePath();
+ctx.fill();
+
+ctx.restore();
+
+// Draw hammer
+ctx.save();
+ctx.translate(S * 0.5, S * 0.3);
+ctx.rotate(-0.4);
+
+// Hammer handle
+ctx.fillStyle = 'rgba(255,255,255,0.9)';
+ctx.beginPath();
+ctx.roundRect(-6, -20, 12, 120, 4);
+ctx.fill();
+
+// Hammer head
+ctx.fillStyle = 'rgba(255,255,255,0.95)';
+ctx.beginPath();
+ctx.roundRect(-40, -40, 80, 40, 6);
+ctx.fill();
+
+// Hammer head highlight
+ctx.fillStyle = 'rgba(255,255,255,0.3)';
+ctx.beginPath();
+ctx.roundRect(-40, -40, 80, 12, [6, 6, 0, 0]);
+ctx.fill();
+
+ctx.restore();
+
+// Spark effects
+ctx.fillStyle = 'rgba(255,255,255,0.8)';
+function drawSpark(x, y, size) {
+  ctx.beginPath();
+  ctx.moveTo(x, y - size);
+  ctx.lineTo(x + size * 0.3, y - size * 0.3);
+  ctx.lineTo(x + size, y);
+  ctx.lineTo(x + size * 0.3, y + size * 0.3);
+  ctx.lineTo(x, y + size);
+  ctx.lineTo(x - size * 0.3, y + size * 0.3);
+  ctx.lineTo(x - size, y);
+  ctx.lineTo(x - size * 0.3, y - size * 0.3);
+  ctx.closePath();
+  ctx.fill();
+}
+
+drawSpark(S * 0.28, S * 0.22, 14);
+drawSpark(S * 0.72, S * 0.18, 10);
+drawSpark(S * 0.78, S * 0.32, 8);
+
+// Small dots
+ctx.beginPath();
+ctx.arc(S * 0.22, S * 0.35, 4, 0, Math.PI * 2);
+ctx.fill();
+ctx.beginPath();
+ctx.arc(S * 0.82, S * 0.25, 3, 0, Math.PI * 2);
+ctx.fill();
+
+// Download buttons
+document.body.innerHTML += '<br><br>';
+[512, 192, 180, 32].forEach(size => {
+  const small = document.createElement('canvas');
+  small.width = size;
+  small.height = size;
+  const sctx = small.getContext('2d');
+  sctx.drawImage(canvas, 0, 0, size, size);
+
+  const a = document.createElement('a');
+  a.download = `icon-${size}.png`;
+  a.href = small.toDataURL('image/png');
+  a.textContent = `Download ${size}x${size}`;
+  a.style.cssText = 'display:inline-block;margin:8px;padding:8px 16px;background:#6366f1;color:white;border-radius:8px;text-decoration:none;';
+  document.body.appendChild(a);
+});
+</script>
+</body>
+</html>

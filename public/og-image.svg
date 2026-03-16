@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1a1a2e"/>
+      <stop offset="100%" stop-color="#16213e"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="50%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+    <linearGradient id="iconBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Subtle grid pattern -->
+  <g stroke="rgba(255,255,255,0.03)" stroke-width="1">
+    <line x1="0" y1="0" x2="0" y2="630"/><line x1="60" y1="0" x2="60" y2="630"/>
+    <line x1="120" y1="0" x2="120" y2="630"/><line x1="180" y1="0" x2="180" y2="630"/>
+    <line x1="240" y1="0" x2="240" y2="630"/><line x1="300" y1="0" x2="300" y2="630"/>
+    <line x1="360" y1="0" x2="360" y2="630"/><line x1="420" y1="0" x2="420" y2="630"/>
+    <line x1="480" y1="0" x2="480" y2="630"/><line x1="540" y1="0" x2="540" y2="630"/>
+    <line x1="600" y1="0" x2="600" y2="630"/><line x1="660" y1="0" x2="660" y2="630"/>
+    <line x1="0" y1="60" x2="1200" y2="60"/><line x1="0" y1="120" x2="1200" y2="120"/>
+    <line x1="0" y1="180" x2="1200" y2="180"/><line x1="0" y1="240" x2="1200" y2="240"/>
+    <line x1="0" y1="300" x2="1200" y2="300"/><line x1="0" y1="360" x2="1200" y2="360"/>
+    <line x1="0" y1="420" x2="1200" y2="420"/><line x1="0" y1="480" x2="1200" y2="480"/>
+    <line x1="0" y1="540" x2="1200" y2="540"/>
+  </g>
+
+  <!-- Glow behind icon -->
+  <circle cx="220" cy="315" r="180" fill="url(#accent)" opacity="0.08"/>
+
+  <!-- App icon (scaled down from icon.svg) -->
+  <g transform="translate(120, 215)">
+    <rect width="200" height="200" rx="44" fill="url(#iconBg)"/>
+    <!-- Anvil -->
+    <g transform="translate(100, 125)" fill="rgba(255,255,255,0.95)">
+      <polygon points="-35,16 -43,32 43,32 35,16"/>
+      <polygon points="-31,16 -27,-4 -39,-4 -47,-12 -47,-20 -39,-20 -23,-12 23,-12 31,-20 39,-20 39,-4 27,-4 31,16"/>
+      <polygon points="-23,-12 23,-12 31,-20 -39,-20 -47,-12" fill="rgba(255,255,255,0.4)"/>
+    </g>
+    <!-- Hammer -->
+    <g transform="translate(100, 70) rotate(-22)" fill="rgba(255,255,255,0.95)">
+      <rect x="-2.5" y="-8" width="5" height="47" rx="2"/>
+      <rect x="-16" y="-18" width="33" height="18" rx="3"/>
+      <rect x="-16" y="-18" width="33" height="6" rx="3" fill="rgba(255,255,255,0.35)"/>
+    </g>
+    <!-- Sparks -->
+    <g fill="rgba(255,255,255,0.7)">
+      <circle cx="45" cy="70" r="2"/>
+      <circle cx="168" cy="55" r="1.5"/>
+      <polygon points="56,46 58,41 60,46 58,51"/>
+      <polygon points="53,43 58,41 63,43 58,46"/>
+    </g>
+  </g>
+
+  <!-- Text content -->
+  <g fill="white" font-family="system-ui, -apple-system, sans-serif">
+    <!-- Title -->
+    <text x="380" y="250" font-size="72" font-weight="700" fill="url(#accent)">IconForge</text>
+    <!-- Subtitle -->
+    <text x="380" y="310" font-size="28" font-weight="400" fill="rgba(255,255,255,0.85)">Free App Icon Generator</text>
+    <!-- Platforms -->
+    <text x="380" y="360" font-size="22" font-weight="400" fill="rgba(255,255,255,0.5)">Android  ·  iOS  ·  Web  ·  All Sizes  ·  No Signup</text>
+
+    <!-- Feature pills -->
+    <g transform="translate(380, 395)">
+      <rect x="0" y="0" width="150" height="36" rx="18" fill="rgba(99,102,241,0.2)" stroke="rgba(99,102,241,0.4)" stroke-width="1"/>
+      <text x="75" y="23" font-size="14" font-weight="500" fill="#a78bfa" text-anchor="middle">Auto Color Pick</text>
+
+      <rect x="165" y="0" width="170" height="36" rx="18" fill="rgba(99,102,241,0.2)" stroke="rgba(99,102,241,0.4)" stroke-width="1"/>
+      <text x="250" y="23" font-size="14" font-weight="500" fill="#a78bfa" text-anchor="middle">Adaptive Icons</text>
+
+      <rect x="350" y="0" width="140" height="36" rx="18" fill="rgba(99,102,241,0.2)" stroke="rgba(99,102,241,0.4)" stroke-width="1"/>
+      <text x="420" y="23" font-size="14" font-weight="500" fill="#a78bfa" text-anchor="middle">ZIP Download</text>
+    </g>
+  </g>
+
+  <!-- URL -->
+  <text x="600" y="580" font-family="monospace" font-size="16" fill="rgba(255,255,255,0.3)" text-anchor="middle">tooltoolnam.github.io/icon-forge</text>
+
+  <!-- Bottom accent line -->
+  <rect x="0" y="622" width="1200" height="8" fill="url(#accent)"/>
+</svg>
